@@ -4,6 +4,7 @@ const Home = () => {
 
 	const [toDos, setToDos] = useState("");
 	const [toDoList, setToDoList] = useState([]);
+	const [user, setUser] = useState("GreizaG");
 
 	// Operaciones To Do List
 	let getToDoListURL = "https://playground.4geeks.com/todo/users/GreizaG";
@@ -43,9 +44,33 @@ const Home = () => {
 			.catch((error) => error)
 	}
 
+	async function deleteToDo (id) {
+		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, { method: "DELETE"})
+		console.log(response)
+		if (response.ok) {
+			const data = await response
+			console.log(data)
+			getToDoList()
+			return true
+			
+		}
+		const data = await response.json()
+			console.log(data)
+			return false
+	}
+
+	async function createUser (user) {
+		const response = await fetch(`https://playground.4geeks.com/todo/users/${user}`, {method: "POST"})
+		console.log(response)
+		const data = await response.json()
+			console.log(data)		
+			return null
+	}
+
 	useEffect(() => {
+		createUser(user);
 		getToDoList();
-	}, [])
+	}, [user])
 
 	return (
 		<div className="m-5 row justify-content-center">
@@ -74,7 +99,7 @@ const Home = () => {
 									<div>
 										<i className="fa-regular fa-trash-can fs-6 ms-auto"
 											onClick={() => {
-												deleteToDo()
+												deleteToDo(value.id)
 											}}></i>
 									</div>
 								</div>
