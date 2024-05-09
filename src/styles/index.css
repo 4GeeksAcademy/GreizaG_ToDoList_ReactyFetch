@@ -37,3 +37,11 @@ p {
 .task:hover .fa-regular{
     visibility: visible;
 }
+
+.task .fa-solid{
+    visibility: hidden;
+}
+
+.task:hover .fa-solid{
+    visibility: visible;
+}

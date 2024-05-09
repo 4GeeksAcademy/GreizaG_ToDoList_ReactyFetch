@@ -44,28 +44,53 @@ const Home = () => {
 			.catch((error) => error)
 	}
 
-	async function deleteToDo (id) {
-		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, { method: "DELETE"})
+	async function deleteToDo(id) {
+		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, { method: "DELETE" })
 		console.log(response)
 		if (response.ok) {
 			const data = await response
 			console.log(data)
 			getToDoList()
 			return true
-			
+
 		}
 		const data = await response.json()
-			console.log(data)
-			return false
+		console.log(data)
+		return false
 	}
 
-	async function createUser (user) {
-		const response = await fetch(`https://playground.4geeks.com/todo/users/${user}`, {method: "POST"})
+	async function createUser(user) {
+		const response = await fetch(`https://playground.4geeks.com/todo/users/${user}`, { method: "POST" })
 		console.log(response)
 		const data = await response.json()
-			console.log(data)		
-			return null
+		console.log(data)
+		return null
 	}
+
+	async function editToDo(id) {
+		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, { method: "PUT" })
+		console.log(response)
+		if (response.ok) {
+			const data = await response.json()
+			console.log(data)
+			getToDoList()
+			return true
+
+		}
+		const data = await response.json()
+		console.log(data)
+		return false
+	}
+
+	async function createUser(user) {
+		const response = await fetch(`https://playground.4geeks.com/todo/users/${user}`, { method: "POST" })
+		console.log(response)
+		const data = await response.json()
+		console.log(data)
+		return null
+	}
+
+
 
 	useEffect(() => {
 		createUser(user);
@@ -101,6 +126,10 @@ const Home = () => {
 											onClick={() => {
 												deleteToDo(value.id)
 											}}></i>
+										<i className="fa-solid fa-pencil ms-2 text-danger"
+											onClick={() => {
+												editToDo(value.id)
+											}}></i>
 									</div>
 								</div>
 							</li>
@@ -117,6 +146,6 @@ const Home = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default Home;
