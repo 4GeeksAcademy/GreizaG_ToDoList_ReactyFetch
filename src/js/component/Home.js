@@ -5,6 +5,8 @@ const Home = () => {
 	const [toDos, setToDos] = useState("");
 	const [toDoList, setToDoList] = useState([]);
 	const [user, setUser] = useState("GreizaG");
+	const [tareaAEditar, setTareaAEditar] = useState("");
+	const [idTarea, setIdTarea] = useState(0);
 
 	// Operaciones To Do List
 	let getToDoListURL = "https://playground.4geeks.com/todo/users/GreizaG";
@@ -68,18 +70,26 @@ const Home = () => {
 	}
 
 	async function editToDo(id) {
-		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, { method: "PUT" })
+		let tarea = {
+			"label": tareaAEditar,
+			"is_done": false
+		}
+		const response = await fetch(`https://playground.4geeks.com/todo/todos/${id}`,
+			{
+				method: "PUT",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify(tarea)
+			})
 		console.log(response)
 		if (response.ok) {
 			const data = await response.json()
 			console.log(data)
 			getToDoList()
-			return true
 
 		}
-		const data = await response.json()
-		console.log(data)
-		return false
+
 	}
 
 	async function createUser(user) {
@@ -127,9 +137,12 @@ const Home = () => {
 												deleteToDo(value.id)
 											}}></i>
 										<i className="fa-solid fa-pencil ms-2 text-danger"
+											data-bs-toggle="modal" data-bs-target="#exampleModal"
 											onClick={() => {
-												editToDo(value.id)
-											}}></i>
+												setTareaAEditar(value.label)
+												setIdTarea(value.id)
+											}}
+										></i>
 									</div>
 								</div>
 							</li>
@@ -142,6 +155,32 @@ const Home = () => {
 					<button className="btn btn-outline-warning btn-sm" onClick={() => {
 						setToDos("")
 					}}>Clear</button>
+				</div>
+			</div>
+			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div className="modal-dialog">
+					<div className="modal-content">
+						<div className="modal-header">
+							<h1 className="modal-title fs-5" id="exampleModalLabel">Edit To Do</h1>
+							<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div className="modal-body">
+							<input type="text" value={tareaAEditar}
+								className="form-control mb-3"
+								style={{ color: "#e090b9" }}
+								onChange={(e) => {
+									setTareaAEditar(e.target.value)
+								}}></input>
+						</div>
+						<div className="modal-footer">
+							<button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" className="btn btn-outline-info"
+								onClick={() => {
+									editToDo(idTarea)
+								}}
+								data-bs-dismiss="modal">Save</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
